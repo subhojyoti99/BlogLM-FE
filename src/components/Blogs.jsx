@@ -96,35 +96,6 @@ export default function Blogs() {
                     </div>
                 ) : (
                     <div className="space-y-8">
-                        {/* DOCX Files Section */}
-                        {/* {blogsData.docx_files.length > 0 && (
-                            <section>
-                                <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                                    📄 Document Files ({blogsData.docx_files.length})
-                                </h2>
-                                <div className="grid gap-3">
-                                    {blogsData.docx_files.map((file) => (
-                                        <div
-                                            key={file}
-                                            className="p-4 border rounded-lg bg-white shadow-sm hover:bg-blue-50 transition-colors"
-                                        >
-                                            <a
-                                                href={`http://localhost:8000/static/blogs/${file}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-blue-700 font-medium hover:text-blue-900 block"
-                                            >
-                                                {formatTitle(file.replace(".docx", ""))}
-                                            </a>
-                                            <p className="text-sm text-gray-500 mt-1">
-                                                {file}
-                                            </p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </section>
-                        )} */}
-
                         {/* Regular Blogs Section */}
                         {blogsData.regular_blogs.length > 0 && (
                             <section>
@@ -141,7 +112,7 @@ export default function Blogs() {
                                                 <div className="flex-1">
                                                     <h3 className="text-lg font-semibold text-gray-800">
                                                         <Link
-                                                            to={`/blogs/${blog.id}/regular`}
+                                                            to={`/blogs/${blog.id}`}
                                                             className="text-lg font-semibold text-gray-800 hover:text-blue-600 cursor-pointer"
                                                         >
                                                             {blog.title}
@@ -210,7 +181,7 @@ export default function Blogs() {
                                                 <div className="flex-1">
                                                     <h3 className="text-lg font-semibold text-gray-800">
                                                         <Link
-                                                            to={`/blogs/${blog.id}/blended`}
+                                                            to={`/blogs/${blog.id}`}
                                                             className="text-lg font-semibold text-gray-800 hover:text-blue-600 cursor-pointer"
                                                         >
                                                             {blog.title}

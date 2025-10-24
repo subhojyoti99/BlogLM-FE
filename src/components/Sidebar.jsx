@@ -10,20 +10,40 @@ export default function Sidebar({
   onSearch,
   loading,
   autoTopic,
-  setAutoTopic
+  setAutoTopic,
+  linkedIn,
+  setLinkedIn,
+  instagram,
+  setInstagram,
+  medium,
+  setMedium
 }) {
+  // const toggleAll = () => {
+  //   const newState = !(linkedIn && instagram && medium);
+  //   setLinkedIn(newState);
+  //   setInstagram(newState);
+  //   setMedium(newState);
+  // };
+  const toggleAll = () => {
+    const newState = !(linkedIn && instagram);
+    setLinkedIn(newState);
+    setInstagram(newState);
+  };
+
   return (
     <>
-      <div className="flex p-2 border-r shadow-xl mb-4 w-full">
-        <div className="flex basis-1/6 items-center justify-start">
-          <p className="text-xl font-semibold">⚙️ Settings</p>
-        </div>
-        <div className="flex basis-2/6 items-center justify-end space-x-3">
-          <label className="basis-1/3 text-end text-sm font-medium">🎭 Writing Tone</label>
+      {/* Single-line Top Container */}
+      <div className="flex items-center px-4 py-2 border-r shadow-xl mb-4 space-x-14 overflow-x-auto">
+        {/* Header */}
+        {/* <p className="text-xl font-semibold whitespace-nowrap">⚙️ Settings</p> */}
+
+        {/* Tone */}
+        <div className="flex items-center space-x-1 whitespace-nowrap">
+          <label className="text-sm font-medium">🎭 Tone</label>
           <select
             value={tone}
             onChange={(e) => setTone(e.target.value)}
-            className="border p-2 rounded basis-2/3"
+            className="border p-1 rounded"
           >
             <option>Professional</option>
             <option>Casual</option>
@@ -32,34 +52,104 @@ export default function Sidebar({
             <option>Enthusiastic</option>
           </select>
         </div>
-        <div className="flex basis-2/6 items-center justify-between space-x-3">
-          <label className="basis-1/3 text-sm font-medium text-end">📏 Word Count: {wordTarget}</label>
+
+        {/* Word Count */}
+        <div className="flex items-center space-x-1 whitespace-nowrap">
+          <label className="text-sm font-medium">Blog Word Limit {wordTarget}</label>
           <input
             type="range"
-            min="300"
+            min="700"
             max="2000"
-            step="100"
+            step="50"
             value={wordTarget}
             onChange={(e) => setWordTarget(e.target.value)}
-            className="basis-2/3"
+            className="w-32"
           />
         </div>
-        <div className="flex basis-1/6 items-center justify-end space-x-3">
-          <label className="basis-1/2 text-sm font-medium text-end">🤖 Auto Topic</label>
+
+        {/* Auto Topic */}
+        {/* <div className="flex items-center space-x-1 whitespace-nowrap">
+          <label className="text-sm font-medium">🤖 Auto Choice</label>
           <button
             type="button"
-            className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${autoTopic ? 'bg-blue-600' : 'bg-gray-200'
+            className={`relative inline-flex h-6 w-11 cursor-pointer rounded-full transition-colors duration-200 ease-in-out ${autoTopic ? "bg-blue-600" : "bg-gray-200"
               }`}
             onClick={() => setAutoTopic(!autoTopic)}
           >
             <span
-              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${autoTopic ? 'translate-x-5' : 'translate-x-0'
+              className={`inline-block h-6 w-6 transform rounded-full bg-white shadow transition duration-200 ease-in-out ${autoTopic ? "translate-x-5" : "translate-x-0"
+                }`}
+            />
+          </button>
+        </div> */}
+
+        {/* LinkedIn */}
+        <div className="flex items-center space-x-1 whitespace-nowrap">
+          <label className="text-sm font-medium">🔗 LinkedIn</label>
+          <button
+            type="button"
+            className={`relative inline-flex h-6 w-11 cursor-pointer rounded-full transition-colors duration-200 ease-in-out ${linkedIn ? "bg-blue-700" : "bg-gray-200"
+              }`}
+            onClick={() => setLinkedIn(!linkedIn)}
+          >
+            <span
+              className={`inline-block h-6 w-6 transform rounded-full bg-white shadow transition duration-200 ease-in-out ${linkedIn ? "translate-x-5" : "translate-x-0"
+                }`}
+            />
+          </button>
+        </div>
+
+        {/* Instagram */}
+        <div className="flex items-center space-x-1 whitespace-nowrap">
+          <label className="text-sm font-medium">📸 Instagram</label>
+          <button
+            type="button"
+            className={`relative inline-flex h-6 w-11 cursor-pointer rounded-full transition-colors duration-200 ease-in-out ${instagram ? "bg-pink-500" : "bg-gray-200"
+              }`}
+            onClick={() => setInstagram(!instagram)}
+          >
+            <span
+              className={`inline-block h-6 w-6 transform rounded-full bg-white shadow transition duration-200 ease-in-out ${instagram ? "translate-x-5" : "translate-x-0"
+                }`}
+            />
+          </button>
+        </div>
+
+        {/* Medium */}
+        <div className="flex items-center space-x-1 whitespace-nowrap">
+          <label className="text-sm font-medium">✍️ Medium</label>
+          <button
+            type="button"
+            className={`relative inline-flex h-6 w-11 cursor-pointer rounded-full transition-colors duration-200 ease-in-out ${medium ? "bg-gray-800" : "bg-gray-200"
+              }`}
+            onClick={() => setMedium(!medium)}
+            disabled
+          >
+            <span
+              className={`inline-block h-6 w-6 transform rounded-full bg-white shadow transition duration-200 ease-in-out ${medium ? "translate-x-5" : "translate-x-0"
+                }`}
+            />
+          </button>
+        </div>
+        {/* Toggle All */}
+        <div className="flex items-center space-x-1 whitespace-nowrap">
+          <label className="text-sm font-medium">🪄 Switch All</label>
+          <button
+            type="button"
+            className={`relative inline-flex h-6 w-11 cursor-pointer rounded-full transition-colors duration-200 ease-in-out ${linkedIn && instagram && medium ? "bg-green-600" : "bg-gray-200"
+              }`}
+            onClick={toggleAll}
+          >
+            <span
+              className={`inline-block h-6 w-6 transform rounded-full bg-white shadow transition duration-200 ease-in-out ${linkedIn && instagram && medium ? "translate-x-5" : "translate-x-0"
                 }`}
             />
           </button>
         </div>
       </div>
-      <div className="mx-3">
+
+      {/* Search Section */}
+      <div className="mx-3 mt-3">
         <input
           type="text"
           value={query}
@@ -80,7 +170,8 @@ export default function Sidebar({
       {autoTopic && (
         <div className="p-1 mx-3">
           <p className="text-sm text-blue-800">
-            🤖 <strong>Auto Topic Mode:</strong> The system will automatically choose and generate the best topic based on current trends.
+            🤖 <strong>Auto Topic Mode:</strong> The system will automatically choose and
+            generate the best topic based on current trends.
           </p>
         </div>
       )}
