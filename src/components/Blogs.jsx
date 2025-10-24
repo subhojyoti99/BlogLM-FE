@@ -52,6 +52,7 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext";
 
 export default function Blogs() {
     const [blogsData, setBlogsData] = useState({
@@ -63,15 +64,51 @@ export default function Blogs() {
     });
     const [loading, setLoading] = useState(true);
 
+    // useEffect(() => {
+    //     fetch("http://localhost:8000/blogs")
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             setBlogsData(data);
+    //             setLoading(false);
+    //         })
+    //         .catch(() => setLoading(false));
+    // }, []);
+
+    const { token } = useAuth();
+
     useEffect(() => {
-        fetch("http://localhost:8000/blogs")
-            .then((res) => res.json())
-            .then((data) => {
+        const fetchBlogs = async () => {
+            try {
+                const response = await fetch("http://localhost:8000/blogs", {
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : '',
+                    }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('Please login to view blogs');
+                    }
+                    throw new Error('Failed to fetch blogs');
+                }
+                
+                const data = await response.json();
                 setBlogsData(data);
+            } catch (error) {
+                console.error('Error fetching blogs:', error);
+                alert(error.message);
+            } finally {
                 setLoading(false);
-            })
-            .catch(() => setLoading(false));
-    }, []);
+            }
+        };
+
+        if (token) {
+            fetchBlogs();
+        } else {
+            setLoading(false);
+        }
+    }, [token]);
+
 
     const formatTitle = (title) => {
         return title

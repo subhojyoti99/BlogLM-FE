@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../auth/AuthContext";
 
 export default function BlogDetail() {
     const { id } = useParams();
@@ -12,10 +13,46 @@ export default function BlogDetail() {
     const [editedContent, setEditedContent] = useState(null);
     const [headingErrors, setHeadingErrors] = useState({});
     const [carouselLoading, setCarouselLoading] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const [carousel, setCarousel] = useState(null);
 
-    const [prompt, setPrompt] = useState("")
+    const [prompt, setPrompt] = useState("");
+
+    const { token } = useAuth();
+
+    // useEffect(() => {
+    //     const fetchBlog = async () => {
+    //         try {
+    //             setLoading(true);
+    //             setError(null);
+
+    //             const response = await fetch(`http://localhost:8000/blogs/${id}`);
+
+    //             if (!response.ok) {
+    //                 if (response.status === 404) {
+    //                     throw new Error('Blog not found');
+    //                 } else if (response.status === 400) {
+    //                     const errorData = await response.json();
+    //                     throw new Error(errorData.detail || 'Invalid request');
+    //                 } else {
+    //                     throw new Error('Failed to fetch blog');
+    //                 }
+    //             }
+    //             console.log("_____________", response)
+    //             const data = await response.json();
+    //             setBlog(data);
+    //         } catch (err) {
+    //             setError(err.message);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     if (id) {
+    //         fetchBlog();
+    //     }
+    // }, [id]);
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -23,11 +60,17 @@ export default function BlogDetail() {
                 setLoading(true);
                 setError(null);
 
-                const response = await fetch(`http://localhost:8000/blogs/${id}`);
+                const response = await fetch(`http://localhost:8000/blogs/${id}`, {
+                    headers: {
+                        'Authorization': token ? `Bearer ${token}` : '',
+                    }
+                });
 
                 if (!response.ok) {
                     if (response.status === 404) {
                         throw new Error('Blog not found');
+                    } else if (response.status === 401) {
+                        throw new Error('Please login to view this blog');
                     } else if (response.status === 400) {
                         const errorData = await response.json();
                         throw new Error(errorData.detail || 'Invalid request');
@@ -35,7 +78,7 @@ export default function BlogDetail() {
                         throw new Error('Failed to fetch blog');
                     }
                 }
-                console.log("_____________", response)
+
                 const data = await response.json();
                 setBlog(data);
             } catch (err) {
@@ -45,10 +88,11 @@ export default function BlogDetail() {
             }
         };
 
-        if (id) {
+        if (id && token) {
             fetchBlog();
         }
-    }, [id]);
+    }, [id, token]);
+
 
     useEffect(() => {
         if (isEditing && blog?.content_json) {
@@ -675,9 +719,10 @@ export default function BlogDetail() {
                                                         {post.images && Object.entries(post.images).map(([filename, base64], imgIndex) => (
                                                             <div key={imgIndex} className="text-center">
                                                                 <img
-                                                                    src={base64} // already base64 data URL
+                                                                    src={base64}
                                                                     alt={`Slide ${imgIndex + 1}`}
-                                                                    className="w-full h-32 object-cover rounded-lg shadow-sm mb-2"
+                                                                    onClick={() => setSelectedImage(base64)} // 👈 open modal
+                                                                    className="w-full h-32 object-cover rounded-lg shadow-sm mb-2 cursor-pointer hover:opacity-80 transition"
                                                                 />
                                                                 <p className="text-xs text-gray-600">{filename}</p>
                                                             </div>
@@ -804,6 +849,26 @@ export default function BlogDetail() {
                     )
                 }
             </div >
+            {selectedImage && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+                    onClick={() => setSelectedImage(null)}
+                >
+                    <div className="relative max-w-4xl w-full p-4">
+                        <button
+                            className="absolute top-4 right-4 bg-white text-gray-800 rounded-full p-2 shadow-md hover:bg-gray-100"
+                            onClick={() => setSelectedImage(null)}
+                        >
+                            ✕
+                        </button>
+                        <img
+                            src={selectedImage}
+                            alt="Preview"
+                            className="w-full max-h-[80vh] object-contain rounded-lg shadow-lg border border-gray-200"
+                        />
+                    </div>
+                </div>
+            )}
         </div >
     );
 }

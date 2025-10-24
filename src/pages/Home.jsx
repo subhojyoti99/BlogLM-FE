@@ -139,6 +139,7 @@ import BlogViewer from "../components/BlogViewer";
 import Header from "../components/Header";
 import LinkedInViewer from "../components/LinkedInViewer";
 import InstaPostGen from "../components/InstaPostGen.jsx";
+import { useAuth } from "../auth/AuthContext.jsx";
 
 export default function Home() {
   const API_URL = "http://localhost:8000";
@@ -162,6 +163,7 @@ export default function Home() {
   const [linkedIn, setLinkedIn] = useState(false);
   const [instagram, setInstagram] = useState(false);
   const [medium, setMedium] = useState(false);
+  const { token } = useAuth();
 
 
   const searchTopics = async () => {
@@ -189,6 +191,7 @@ export default function Home() {
           signal: abortControllerRef.current.signal,
           headers: {
             'Cache-Control': 'no-cache',
+            'Authorization': token ? `Bearer ${token}` : '',
           }
         }
       );
@@ -423,7 +426,12 @@ export default function Home() {
           instagram: instagram,
           medium: medium
         }
+      }, {
+        headers: {
+          'Authorization': token ? `Bearer ${token}` : '',
+        }
       });
+
       setBlog(res?.data);
       if (res?.data?.generated_versions?.linkedin) {
         setLinkedInVersion(res.data.generated_versions.linkedin);
@@ -434,6 +442,9 @@ export default function Home() {
       }
 
     } catch (error) {
+      if (error.response?.status === 401) {
+        alert('Please login to generate blogs');
+      }
       console.error("Blog generation failed:", error);
       alert("Blog generation failed");
     }
