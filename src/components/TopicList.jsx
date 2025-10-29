@@ -132,9 +132,13 @@ export default function TopicList({
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mt-6">
-        🔍 Found Topics ({topics.length})
-      </h2>
+      {loading ? <>
+        <h2 className="text-xl font-semibold mt-6">
+          🔍 Found Topics ({topics.length})
+        </h2>
+      </> : <><h2 className="text-xl font-semibold mt-6">
+        Search Your Required Topic
+      </h2></>}
 
       {autoTopic ? (
         <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
@@ -150,8 +154,8 @@ export default function TopicList({
                 key={i}
                 onClick={() => toggleSelection(i)}
                 className={`p-3 border rounded cursor-pointer transition ${selectedTopics.includes(i)
-                    ? "bg-blue-100 border-blue-500"
-                    : "bg-gray-50 hover:bg-gray-100"
+                  ? "bg-blue-100 border-blue-500"
+                  : "bg-gray-50 hover:bg-gray-100"
                   }`}
               >
                 <b>{t.title}</b>

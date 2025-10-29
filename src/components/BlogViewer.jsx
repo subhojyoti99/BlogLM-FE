@@ -551,6 +551,7 @@
 
 import { useState } from "react";
 
+// const API_URL = "https://lexis.ravenex.in/api";
 const API_URL = "http://localhost:8000";
 
 export default function BlogViewer({ blog }) {
@@ -1102,7 +1103,7 @@ export default function BlogViewer({ blog }) {
 
       {content?.figure1_prompt && (
         <div className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
-          <h3 className="font-semibold text-gray-800 mb-2">Illustration Prompt</h3>
+          <h3 className="font-semibold text-gray-800 mb-2">Illustration Suggestions</h3>
           {isEditing ? (
             <textarea
               value={content.figure1_prompt}

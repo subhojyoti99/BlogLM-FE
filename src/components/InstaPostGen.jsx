@@ -118,7 +118,7 @@ export default function InstaPostGen({ blogId, instaPost }) {
         setLoading(true);
 
         try {
-            const res = await axios.post(`http://localhost:8000/generate-instagram-carousel`, {
+            const res = await axios.post(`https://lexis.ravenex.in/api/generate-instagram-carousel`, {
                 blog_id: blogId,
                 customization_prompt: prompt,
             });
@@ -156,8 +156,8 @@ export default function InstaPostGen({ blogId, instaPost }) {
                 onClick={handleGenerate}
                 disabled={loading}
                 className={`w-full py-2 mt-2 rounded-lg text-white font-semibold ${loading
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-pink-600 hover:bg-pink-700"
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-pink-600 hover:bg-pink-700"
                     }`}
             >
                 {loading

@@ -55,8 +55,10 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 
 export default function Blogs() {
+    const API_URL = "http://localhost:8000";
+    // const API_URL = "https://lexis.ravenex.in/api";
+
     const [blogsData, setBlogsData] = useState({
-        docx_files: [],
         regular_blogs: [],
         blended_blogs: [],
         total_regular: 0,
@@ -79,19 +81,19 @@ export default function Blogs() {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await fetch("http://localhost:8000/blogs", {
+                const response = await fetch(`${API_URL}/blogs`, {
                     headers: {
                         'Authorization': token ? `Bearer ${token}` : '',
                     }
                 });
-                
+
                 if (!response.ok) {
                     if (response.status === 401) {
                         throw new Error('Please login to view blogs');
                     }
                     throw new Error('Failed to fetch blogs');
                 }
-                
+
                 const data = await response.json();
                 setBlogsData(data);
             } catch (error) {
@@ -108,7 +110,6 @@ export default function Blogs() {
             setLoading(false);
         }
     }, [token]);
-
 
     const formatTitle = (title) => {
         return title
@@ -177,7 +178,7 @@ export default function Blogs() {
                                                 </div>
                                                 <div className="flex gap-2 ml-4">
                                                     <a
-                                                        href={`http://localhost:8000/static/blogs/${blog.docx_filename}`}
+                                                        href={`${API_URL}/static/blogs/${blog.docx_filename}`}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
@@ -246,7 +247,7 @@ export default function Blogs() {
                                                 </div>
                                                 <div className="flex gap-2 ml-4">
                                                     <a
-                                                        href={`http://localhost:8000/static/blogs/${blog.docx_filename}`}
+                                                        href={`${API_URL}/static/blogs/${blog.docx_filename}`}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
@@ -272,9 +273,9 @@ export default function Blogs() {
                         )}
 
                         {/* Empty State */}
-                        {blogsData.docx_files.length === 0 &&
-                            blogsData.regular_blogs.length === 0 &&
-                            blogsData.blended_blogs.length === 0 && (
+                        {blogsData.docx_files?.length === 0 &&
+                            blogsData.regular_blogs?.length === 0 &&
+                            blogsData.blended_blogs?.length === 0 && (
                                 <div className="text-center py-12">
                                     <p className="text-gray-600 text-lg">No blogs found.</p>
                                     <p className="text-gray-500 mt-2">

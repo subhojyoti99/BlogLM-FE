@@ -4,6 +4,8 @@ import axios from "axios";
 import { useAuth } from "../auth/AuthContext";
 
 export default function BlogDetail() {
+    // const API_URL = "https://lexis.ravenex.in/api";
+    const API_URL = "http://localhost:8000";
     const { id } = useParams();
     const [blog, setBlog] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -60,7 +62,7 @@ export default function BlogDetail() {
                 setLoading(true);
                 setError(null);
 
-                const response = await fetch(`http://localhost:8000/blogs/${id}`, {
+                const response = await fetch(`${API_URL}/blogs/${id}`, {
                     headers: {
                         'Authorization': token ? `Bearer ${token}` : '',
                     }
@@ -181,7 +183,7 @@ export default function BlogDetail() {
         console.log("Generating carousel for blog id:", id);
         setCarouselLoading(true);
         try {
-            const res = await axios.post(`http://localhost:8000/generate-instagram-carousel`, {
+            const res = await axios.post(`${API_URL}/generate-instagram-carousel`, {
                 blog_id: parseInt(id),
                 customization_prompt: prompt || ""
             });
@@ -270,7 +272,7 @@ export default function BlogDetail() {
                                             };
 
                                             const response = await fetch(
-                                                `http://localhost:8000/blogs/${blog.id}`,
+                                                `${API_URL}/blogs/${blog.id}`,
                                                 {
                                                     method: "PUT",
                                                     headers: { "Content-Type": "application/json" },
@@ -628,7 +630,7 @@ export default function BlogDetail() {
                                     {/* Figure */}
                                     {blog.figure1_prompt && (
                                         <div className="mt-6 p-4 bg-yellow-50 rounded-lg">
-                                            <h4 className="font-semibold text-yellow-900 mb-2">Figure Prompt</h4>
+                                            <h4 className="font-semibold text-yellow-900 mb-2">Illustration Suggestions</h4>
                                             <p className="text-yellow-800 italic">{blog.figure1_prompt}</p>
                                             <h4 className="font-bold text-orange-500 mb-2">Click Here to Generate</h4>
                                         </div>

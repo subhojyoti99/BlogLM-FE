@@ -142,6 +142,7 @@ import InstaPostGen from "../components/InstaPostGen.jsx";
 import { useAuth } from "../auth/AuthContext.jsx";
 
 export default function Home() {
+  // const API_URL = "https://lexis.ravenex.in/api";
   const API_URL = "http://localhost:8000";
 
   const [query, setQuery] = useState("latest technology trends 2025");
@@ -163,7 +164,7 @@ export default function Home() {
   const [linkedIn, setLinkedIn] = useState(false);
   const [instagram, setInstagram] = useState(false);
   const [medium, setMedium] = useState(false);
-  const { token } = useAuth();
+  const { user, token } = useAuth();
 
 
   const searchTopics = async () => {
@@ -302,98 +303,6 @@ export default function Home() {
     }
   };
 
-  // const searchTopics = async () => {
-  //   setLoading(true);
-  //   setStreamingStatus("");
-  //   setSummaryChunks([]);
-  //   setFullSummary("");
-  //   setTopics([]);
-
-  //   try {
-  //     const response = await fetch(`${API_URL}/search-topics-stream?query=${encodeURIComponent(query)}`);
-
-  //     if (!response.ok) {
-  //       throw new Error('Search failed');
-  //     }
-
-  //     const reader = response.body.getReader();
-  //     const decoder = new TextDecoder();
-
-  //     while (true) {
-  //       const { done, value } = await reader.read();
-  //       if (done) break;
-
-  //       const chunk = decoder.decode(value);
-  //       const lines = chunk.split('\n').filter(line => line.trim());
-
-  //       for (const line of lines) {
-  //         try {
-  //           const data = JSON.parse(line);
-  //           console.log('Stream data:', data);
-
-  //           // Handle different status updates
-  //           switch (data.status) {
-  //             case 'search_complete':
-  //               setTopics(data.topics || []);
-  //               setSearchId(data.search_id);
-  //               setStreamingStatus("Search complete - generating summary...");
-
-  //               // If auto topic is enabled, automatically select and generate blog
-  //               if (autoTopic && data.topics.length > 0) {
-  //                 await generateAutoBlog(data.search_id, data.topics);
-  //               }
-  //               break;
-
-  //             case 'generating_summary':
-  //               setStreamingStatus("Generating summary...");
-  //               break;
-
-  //             case 'summary_in_progress':
-  //               if (data.summary_chunk) {
-  //                 setSummaryChunks(prev => [...prev, data.summary_chunk]);
-  //                 setStreamingStatus(`Generating summary... (${summaryChunks.length + 1} chunks)`);
-  //               }
-  //               break;
-
-  //             case 'complete':
-  //               setFullSummary(data.summary || summaryChunks.join(''));
-  //               setStreamingStatus("Complete!");
-  //               setLoading(false);
-  //               break;
-
-  //             default:
-  //               // Handle initial response without status
-  //               if (data.topics && data.search_id) {
-  //                 setTopics(data.topics);
-  //                 setSearchId(data.search_id);
-  //                 setStreamingStatus("Search complete - generating summary...");
-
-  //                 if (autoTopic && data.topics.length > 0) {
-  //                   await generateAutoBlog(data.search_id, data.topics);
-  //                 }
-  //               }
-  //               break;
-  //           }
-
-  //           // Handle error case
-  //           if (data.error) {
-  //             alert(data.error);
-  //             setLoading(false);
-  //             return;
-  //           }
-
-  //         } catch (e) {
-  //           console.error('Error parsing stream chunk:', e);
-  //         }
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error('Search failed:', error);
-  //     alert("Search failed");
-  //     setLoading(false);
-  //   }
-  // };
-
   const generateAutoBlog = async (searchId, topics) => {
     try {
       const res = await axios.post(`${API_URL}/generate-auto-blog`, null, {
@@ -472,6 +381,7 @@ export default function Home() {
         setInstagram={setInstagram}
         medium={medium}
         setMedium={setMedium}
+        user={user}
       />
 
       <div className="flex">
